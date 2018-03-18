@@ -1,3 +1,4 @@
+//The@wlsKnow21! FTP Password
 /*
   Poker: Texas Hold Em App by Raymond Jones
   Missing features:
@@ -18,6 +19,23 @@ function Card(suit, rank){
   }
   this.getSuit = function(){
     return this.suit;
+  }
+  this.getScore = function(){
+    if(this.getRank() == "Jack"){
+      return 11;
+    }
+    else if(this.getRank() == "Queen"){
+      return 12;
+    }
+    else if(this.getRank() == "King"){
+      return 13;
+    }
+    else if(this.getRank() == "Ace"){
+      return 14;
+    }
+    else{
+      return this.rank;
+    }
   }
 }
 //Deck constructor and object
@@ -155,6 +173,18 @@ this.fold = function(){
 this.addCard = function(newCard){
   this.cards.push(newCard);
   }
+
+this.sortHand = function(){
+  for(var i=0; i < this.cards; i++){
+    var element = this.cards[i].getScore();
+    var temp = i;
+    while(temp > 0 && this.cards[temp-1].getScore() > element){
+      this.cards[temp] = this.cards[temp-1];
+      temp = temp - 1;
+      }
+    this.cards[temp] = this.cards[i];
+    }
+  }
 }
 
 //Game Class and Methods
@@ -201,8 +231,7 @@ function Game(){
       }
     }
   }
-  //Find players left of the dealer
-  //Sets them to big and small blind
+//Sets Big and Small Blind based on Dealer Position
   this.setBlinds = function(players){
     for(var i = 0; i < players.length; i++){
       if(players[i].getDealStatus() == true){
@@ -438,10 +467,9 @@ for(var i = 0; i < players.length; i++){
   }
 }
 game.setBlinds(players);
-game.takeBlinds(players);
+//game.takeBlinds(players);
 console.log(players);
-game.takeTurns(players);
-console.log(players);
+//game.takeTurns(players);
 //Flop
 for(i = 0; i < 3; i++){
   game.addCommunity(draw(cardss));
@@ -450,8 +478,9 @@ for(i = 0; i < 3; i++){
 game.addCommunity(draw(cardss));
 //River
 game.addCommunity(draw(cardss));
+for(i = 0; i < 5; i++){
+  players[0].addCard(game.getCommunity()[i]);
+}
+players[0].sortHand();
+console.log(players[0]);
 console.log(game.getCommunity());
-
-
-
-//Pre-Flop
